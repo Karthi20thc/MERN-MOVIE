@@ -7,54 +7,61 @@ import Register from './Pages/Register'
 import SingleProductPage from './Pages/SingleProductPage'
 import "./app.css"
 import {
- BrowserRouter as Router,
- Switch,
- Route,
- Redirect
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Redirect
 } from "react-router-dom";
 import { useSelector } from 'react-redux'
+import Orders from './Pages/Orders'
 
 const App = () => {
- const userState = useSelector((state) => { return state.user });
- console.log(userState);
+  const userState = useSelector((state) => { return state.user });
+  console.log(userState);
 
- // storing the current user so that we can get persist the user on reloads
- useEffect(() => {
-  localStorage.setItem("user", JSON.stringify(userState.currentUser))
- }, [userState.currentUser])
+  // storing the current user so that we can get persist the user on reloads
+  useEffect(() => {
+    localStorage.setItem("user", JSON.stringify(userState.currentUser))
+  }, [userState.currentUser])
 
- console.log(JSON.parse(localStorage.getItem("user")))
+  console.log(JSON.parse(localStorage.getItem("user")))
 
- return (
-  <Router>
-   <Switch>
-    <Route exact path="/">
-     {userState.currentUser ? <Home /> : <Login />}
-    </Route>
-    <Route path="/products/:category">
-     <ProductPage />
-    </Route>
-    <Route path="/product/:id">
-     <SingleProductPage />
-    </Route>
-    <Route path="/cart">
-     <Cart />
-    </Route>
-    <Route path="/login">
-     {userState.currentUser ? <Redirect to="/" /> : <Login />}
-    </Route>
-    <Route path="/register">
-     <Register />
-    </Route>
-   </Switch>
-  </Router>
+  return (
+    <Router>
+      <Switch>
+        <Route exact path="/">
+          {userState.currentUser ? <Home /> : <Login />}
+        </Route>
+        <Route path="/products/:category">
+          <ProductPage />
+        </Route>
+        <Route path="/product/:id">
+          <SingleProductPage />
+        </Route>
+        <Route path="/cart">
+          <Cart />
+        </Route>
+        <Route path="/login">
+          {userState.currentUser ? <Redirect to="/" /> : <Login />}
+        </Route>
+        <Route path="/register">
+          <Register />
+        </Route>
+        <Route path="/myOrders">
+          <Orders />
+        </Route>
+        {/* <Route path="/payment">
+          <Payment />
+        </Route> */}
+      </Switch>
+    </Router>
 
-  // <ProductPage />
-  // <SingleProductPage />
-  // <Register />
-  // <Login />
-  // <Cart />
- )
+    // <ProductPage />
+    // <SingleProductPage />
+    // <Register />
+    // <Login />
+    // <Cart />
+  )
 }
 
 export default App

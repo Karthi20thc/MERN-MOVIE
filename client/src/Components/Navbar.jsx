@@ -63,6 +63,7 @@ const Right = styled.div`
 const MenuItem = styled.div`
 	border: 0.5px solid;
 	padding: 5px 10px;
+	background-color: #c46060;
 	cursor: pointer;
 	&:hover {
 		background-color: white;
@@ -73,6 +74,7 @@ const CartItem = styled.div`
 	display: flex;
 	align-items: center;
 	border: 0.5px solid;
+	background-color: #c46060;
 	gap: 5px;
 	padding: 5px 10px;
 	cursor: pointer;
@@ -126,6 +128,9 @@ const Navbar = (props) => {
 							<MenuItem>LogIn</MenuItem>
 						</Link>
 					)}
+					<Link to={"/myOrders"}>
+						<MenuItem>My Orders</MenuItem>
+					</Link>
 
 					<Link to={`/cart`}>
 						<CartItem>

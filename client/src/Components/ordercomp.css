@@ -1,0 +1,58 @@
+.wrapper {
+	padding: 25px;
+}
+h1,
+h2,
+h3,
+h4,
+h5 {
+	color: #333;
+}
+
+.allorders {
+	display: flex;
+	flex-direction: column;
+}
+.order {
+	display: flex;
+	gap: 40px;
+	border: 0.5px dotted;
+	padding: 10px;
+}
+
+.orderimg {
+	width: 90px;
+}
+
+.details {
+	display: flex;
+	flex-direction: column;
+	gap: 5px;
+}
+.pricedetails {
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+}
+.pricedetail {
+	font-size: 20px;
+	padding: 3px;
+}
+
+.shippingstatus {
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+}
+.ordersuccess {
+	font-size: 22px;
+	background-color: gold;
+	padding: 10px 15px;
+	border-radius: 5px;
+}
+
+.orderstatus {
+	background-color: skyblue;
+	padding: 5px 10px;
+	border-radius: 5px;
+}

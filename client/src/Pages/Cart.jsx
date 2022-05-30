@@ -5,11 +5,13 @@ import Footer from "../Components/Footer";
 import { IoMdRemove } from "react-icons/io";
 import { GrAdd } from "react-icons/gr";
 import { useDispatch, useSelector } from "react-redux";
-import StripeCheckout from "react-stripe-checkout";
+
+// import StripeCheckout from "react-stripe-checkout";
 import { BASE_URL, userRequest } from "../axiosRequest";
 // import { useHistory } from "react-router-dom";
 import axios from "axios";
 import { cartQuantityValue, cartTotalPrice } from "../Redux/cartRedux";
+import { useHistory } from "react-router-dom";
 
 const Container = styled.div`
 	height: auto;
@@ -136,11 +138,13 @@ const Button = styled.button`
 
 const Cart = () => {
 	// const history = useHistory();
-	const [tokenFromStripe, setTokenFromStripe] = useState(null);
+	// const [tokenFromStripe, setTokenFromStripe] = useState(null);
 	const [cartFromApi, SetCartFromApi] = useState([]);
+	const [paymentProcess, SetPaymentProcess] = useState("Checkout Now");
 	const KEY =
 		"pk_test_51Kt9XQSChdbo5Stnd5mTHloYr1Xtim7RVYBCsaJ9x8EpmifsgGarVzhmvTQ7TgmhDEOfE2VNDrQpf31Yb2p2zVSP001evS55PI";
 	const dispatch = useDispatch();
+	const history = useHistory();
 
 	const cartstate = useSelector((state) => {
 		return state.cart;
@@ -150,6 +154,7 @@ const Cart = () => {
 	const userState = useSelector((state) => {
 		return state.user;
 	});
+	console.log(userState.currentUser._id);
 	const TOKEN = userState.currentUser.accessToken;
 
 	//calculating Total Price
@@ -161,28 +166,28 @@ const Cart = () => {
 		dispatch(cartTotalPrice({ value: cartFromApi }));
 	}, [cartFromApi]);
 
-	const onToken = (token) => {
-		setTokenFromStripe(token);
-	};
-	console.log(tokenFromStripe);
+	// const onToken = (token) => {
+	// 	setTokenFromStripe(token);
+	// };
+	// console.log(tokenFromStripe);
 
-	useEffect(() => {
-		const makeRequest = async () => {
-			try {
-				const res = await userRequest.post("/checkout/payment", {
-					tokenId: tokenFromStripe.id,
-					amount: cartstate.total,
-				});
-				console.log(res);
-				// history.push("/success", {
-				// 	stripeData: res.data,
-				// });
-			} catch (error) {
-				console.log(error);
-			}
-		};
-		tokenFromStripe && makeRequest();
-	}, [tokenFromStripe]);
+	// useEffect(() => {
+	// 	const makeRequest = async () => {
+	// 		try {
+	// 			const res = await userRequest.post("/checkout/payment", {
+	// 				tokenId: tokenFromStripe.id,
+	// 				amount: cartstate.total,
+	// 			});
+	// 			console.log(res);
+	// 			// history.push("/success", {
+	// 			// 	stripeData: res.data,
+	// 			// });
+	// 		} catch (error) {
+	// 			console.log(error);
+	// 		}
+	// 	};
+	// 	tokenFromStripe && makeRequest();
+	// }, [tokenFromStripe]);
 
 	// for getting the user cart
 	useEffect(() => {
@@ -206,17 +211,63 @@ const Cart = () => {
 		dispatch(cartQuantityValue({ value: cartFromApi.length }));
 	}, [cartFromApi.length]);
 
+	// stripe
+	const paymentsHandler = async () => {
+		try {
+			SetPaymentProcess("Processing .....");
+			const res = await axios.post(
+				"https://floating-retreat-28847.herokuapp.com/api/checkout/create-session",
+				{
+					userID: userState.currentUser._id,
+					items: [
+						// cartFromApi.map((item)=>())
+						{ id: 1, quantity: 3 },
+						{ id: 2, quantity: 1 },
+					],
+				}
+			);
+			console.log(res.data.session);
+			window.location.replace(res.data.session.url);
+			// console.log(res.data.session);
+		} catch (error) {
+			console.log(error);
+		}
+
+		// fetch("http://localhost:5000/checkout/create-session", {
+		// 	method: "POST",
+		// 	headers: {
+		// 		"Content-Type": "application/json",
+		// 	},
+		// 	body: JSON.stringify({
+		// 		items: [
+		// 			{ id: 1, quantity: 3 },
+		// 			{ id: 2, quantity: 1 },
+		// 		],
+		// 	}),
+		// })
+		// 	.then((res) => {
+		// 		if (res.ok) return res.json();
+		// 		return res.json().then((json) => Promise.reject(json));
+		// 	})
+		// 	.then(({ url }) => {
+		// 		window.location = url;
+		// 	})
+		// 	.catch((e) => {
+		// 		console.error(e.error);
+		// 	});
+	};
+
 	return (
 		<Container>
 			<Navbar />
 			<Title>YOUR CART</Title>
 			<Top>
-				<TopButton>Continue Shopping</TopButton>
+				{/* <TopButton>Continue Shopping</TopButton> */}
 				<TopTexts>
 					<TopText>Shopping Bag({cartFromApi.length})</TopText>
 					<TopText>Your Wishlist (0)</TopText>
 				</TopTexts>
-				<TopButton>CHECKOUT NOW</TopButton>
+				{/* <TopButton>CHECKOUT NOW</TopButton> */}
 			</Top>
 			{/*4*/}
 			<Bottom>
@@ -257,48 +308,28 @@ const Cart = () => {
 					</Product>
 				</Info>
 				{/*  */}
-				<Summary>
-					<SummaryTitle>ORDER SUMMARY</SummaryTitle>
-					<SummaryItem>
-						<SummaryItemText>Subtotal</SummaryItemText>
-						<SummaryItemPrice>$ {cartstate.total}</SummaryItemPrice>
-					</SummaryItem>
-					<SummaryItem>
-						<SummaryItemText>Estimated Shipping</SummaryItemText>
-						<SummaryItemPrice>$ 5.90</SummaryItemPrice>
-					</SummaryItem>
-					<SummaryItem>
-						<SummaryItemText>Shipping Discount</SummaryItemText>
-						<SummaryItemPrice>$ -5.90</SummaryItemPrice>
-					</SummaryItem>
-					<SummaryItem type='total'>
-						<SummaryItemText>Total</SummaryItemText>
-						<SummaryItemPrice>$ {cartstate.total}</SummaryItemPrice>
-					</SummaryItem>
-
-					{/* stripe payment */}
-					<StripeCheckout
-						name='MOVIEFLIX' // the pop-in header title
-						description={`Your Total Amout to Pay is $ ${cartstate.total}`} // the pop-in header subtitle
-						image='' // the pop-in header image (default none)
-						// ComponentClass='div'
-						// panelLabel='Pay' // prepended to the amount in the bottom pay button
-						amount={cartstate.total * 100} // cents
-						// currency='USD'
-						stripeKey={KEY}
-						// locale='zh'
-						// email='MOVIEFLIX@gmail.com'
-						// Note: Enabling either address option will give the user the ability to
-						// fill out both. Addresses are sent as a second parameter in the token callback.
-						shippingAddress
-						billingAddress
-						// Note: enabling both zipCode checks and billing or shipping address will
-						// cause zipCheck to be pulled from billing address (set to shipping if none provided).
-						token={onToken} // submit callback
-					>
-						<Button>Check Out Now</Button>
-					</StripeCheckout>
-				</Summary>
+				{cartFromApi.length > 0 && (
+					<Summary>
+						<SummaryTitle>ORDER SUMMARY</SummaryTitle>
+						<SummaryItem>
+							<SummaryItemText>Subtotal</SummaryItemText>
+							<SummaryItemPrice>$ {cartstate.total}</SummaryItemPrice>
+						</SummaryItem>
+						<SummaryItem>
+							<SummaryItemText>Estimated Shipping</SummaryItemText>
+							<SummaryItemPrice>$ 5.90</SummaryItemPrice>
+						</SummaryItem>
+						<SummaryItem>
+							<SummaryItemText>Shipping Discount</SummaryItemText>
+							<SummaryItemPrice>$ -5.90</SummaryItemPrice>
+						</SummaryItem>
+						<SummaryItem type='total'>
+							<SummaryItemText>Total</SummaryItemText>
+							<SummaryItemPrice>$ {cartstate.total}</SummaryItemPrice>
+						</SummaryItem>
+						<Button onClick={paymentsHandler}>{paymentProcess}</Button>
+					</Summary>
+				)}
 			</Bottom>
 			<Footer />
 		</Container>
@@ -306,3 +337,28 @@ const Cart = () => {
 };
 
 export default Cart;
+
+{
+	/* stripe payment */
+}
+//  <StripeCheckout
+//  name='MOVIEFLIX' // the pop-in header title
+//  description={`Your Total Amout to Pay is  ${cartstate.total}`} // the pop-in header subtitle
+//  image='' // the pop-in header image (default none)
+//  // ComponentClass='div'
+//  // panelLabel='Pay' // prepended to the amount in the bottom pay button
+//  amount={cartstate.total * 100} // cents
+//  currency='INR'
+//  stripeKey={KEY}
+//  // locale='zh'
+//  // email='MOVIEFLIX@gmail.com'
+//  // Note: Enabling either address option will give the user the ability to
+//  // fill out both. Addresses are sent as a second parameter in the token callback.
+//  shippingAddress
+//  billingAddress
+//  // Note: enabling both zipCode checks and billing or shipping address will
+//  // cause zipCheck to be pulled from billing address (set to shipping if none provided).
+//  token={onToken} // submit callback
+// >
+//  <Button>Check Out Now</Button>
+// </StripeCheckout>

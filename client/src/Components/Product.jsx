@@ -20,6 +20,7 @@ const Info = styled.div`
 	top: 0;
 	left: 0;
 	display: flex;
+	flex-direction: column;
 	align-items: center;
 	justify-content: center;
 	background-color: rgba(0, 0, 0, 0.534);
@@ -39,8 +40,15 @@ const Container = styled.div`
 		opacity: 1;
 	}
 `;
+const PriceItem = styled.div`
+	color: greenyellow;
+	/* background-color: white; */
+	font-weight: 600;
+	font-size: 25px;
+	/* padding: 5px 10px; */
+`;
 const Product = (props) => {
-	const { img, _id } = props.item; // This item object is coming from the backend.
+	const { img, _id, price } = props.item; // This item object is coming from the backend.
 	return (
 		<Container>
 			{/* 1 */}
@@ -63,6 +71,7 @@ const Product = (props) => {
 						style={{ width: "40px", height: "40px", color: "white", cursor: "pointer" }}
 					/> */}
 				</Icon>
+				<PriceItem>₹ {price}</PriceItem>
 			</Info>
 		</Container>
 	);
