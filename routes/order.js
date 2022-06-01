@@ -10,28 +10,29 @@ const {
 // http://localhost:5000/api/order
 
 router.get('/my-orders', async (req, res) => {
-  const id = req.query.userId
-  const allCarts = await Cart.find({ userId: "" + id })
-
-  // const userAllOrders = new Order(...allCarts)
-  // console.log(allCarts)
-  const newArray = allCarts.map(function (item) {
-    const newObj = {};
-    newObj.language = item.language
-    newObj.productImg = item.productImg
-    newObj.quality = item.quality
-    newObj.quantity = item.quantity
-    newObj.price = item.price
-    newObj.userId = item.userId
-    newObj.productId = item.productId
-    newObj.productTitle = item.productTitle
-    newObj.totalAmount = item.price * item.quantity
-
-    return newObj;
-  });
-  // console.log(newArray);
-  // const allOrders = new Order(...newArray);
   try {
+    console.log(req.query.userId);
+    const allCarts = await Cart.find({ userId: req.query.userId })
+
+    // const userAllOrders = new Order(...allCarts)
+    // console.log(allCarts)
+    const newArray = allCarts.map(function (item) {
+      const newObj = {};
+      newObj.language = item.language
+      newObj.productImg = item.productImg
+      newObj.quality = item.quality
+      newObj.quantity = item.quantity
+      newObj.price = item.price
+      newObj.userId = item.userId
+      newObj.productId = item.productId
+      newObj.productTitle = item.productTitle
+      newObj.totalAmount = item.price * item.quantity
+
+      return newObj;
+    });
+    // console.log(newArray);
+    // const allOrders = new Order(...newArray);
+
     // const savedOrders = await allOrders.save();
     const savedOrders = await Order.create(...newArray);
     if (savedOrders) {
