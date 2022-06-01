@@ -11,7 +11,7 @@ const {
 
 router.get('/my-orders', async (req, res) => {
   console.log(req.query.userId);
-  const allCarts = await Cart.find({ userID: req.query.UserId })
+  const allCarts = await Cart.find({ userId: req.query.UserId })
 
   // const userAllOrders = new Order(...allCarts)
   // console.log(allCarts)
@@ -35,7 +35,8 @@ router.get('/my-orders', async (req, res) => {
     // const savedOrders = await allOrders.save();
     const savedOrders = await Order.create(...newArray);
     if (savedOrders) {
-      await Cart.deleteMany({ userID: req.query.UserId })
+      const id = req.query.userId
+      await Cart.deleteMany({ userId: "" + id })
     }
     res.redirect('https://floating-retreat-28847.herokuapp.com/myOrders')
   } catch (error) { console.log(error) }

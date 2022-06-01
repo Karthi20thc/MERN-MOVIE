@@ -219,11 +219,6 @@ const Cart = () => {
 				"https://floating-retreat-28847.herokuapp.com/api/checkout/create-session",
 				{
 					userID: userState.currentUser._id,
-					items: [
-						// cartFromApi.map((item)=>())
-						{ id: 1, quantity: 3 },
-						{ id: 2, quantity: 1 },
-					],
 				}
 			);
 			console.log(res.data.session);

@@ -43,9 +43,9 @@ router.post("/create-session", async (req, res) => {
     })
 
     //3. Delete the cart
-    console.log(session.payment_status);
+    // console.log(session.payment_status);
 
-    if (session.payment_status === "paid") { await Cart.deleteMany({ userID: req.body.UserID }) }
+    // if (session.payment_status === "paid") { await Cart.deleteMany({ userID: req.body.UserID }) }
     // await Cart.deleteMany({ userID: req.body.UserID }) only if the payment is success , execute this code
 
     res.json({
