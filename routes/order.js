@@ -10,7 +10,6 @@ const {
 // http://localhost:5000/api/order
 
 router.get('/my-orders', async (req, res) => {
-  console.log(req.query.userId);
   const id = req.query.userId
   const allCarts = await Cart.find({ userId: "" + id })
 

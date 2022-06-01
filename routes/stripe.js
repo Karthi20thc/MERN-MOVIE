@@ -15,8 +15,8 @@ const stripe = require("stripe")(KEY);
 router.post("/create-session", async (req, res) => {
   try {
     //1. finding the user cart
-    const currentUser = req.body.userID;
-    const allUserCart = await Cart.find({ userId: req.body.UserID })
+
+    const allUserCart = await Cart.find({ userId: "" + req.body.UserID })
     // console.log(allUserCart.length);
 
     // 2. create session
