@@ -37,7 +37,7 @@ router.get('/my-orders', async (req, res) => {
     const savedOrders = await Order.create(...newArray);
     if (savedOrders) {
 
-      await Cart.deleteMany({ userId: "" + id })
+      await Cart.deleteMany({ userId: "" + req.query.userId })
     }
     res.redirect('https://floating-retreat-28847.herokuapp.com/myOrders')
   } catch (error) { console.log(error) }
