@@ -1,3 +1,4 @@
+const { BASE_URL } = require("../client/src/axiosRequest");
 const Cart = require("../models/Cart");
 
 const router = require("express").Router();
@@ -38,7 +39,7 @@ router.post("/create-session", async (req, res) => {
         }
       }),
       // customer_email: req.user.email,
-      success_url: `https://floating-retreat-28847.herokuapp.com/api/order/my-orders?userId=${req.body.userID}`,
+      success_url: `${BASE_URL}order/my-orders?userId=${req.body.userID}`,
       cancel_url: `${process.env.CLIENT_URL}/cancel.html`,
     })
 

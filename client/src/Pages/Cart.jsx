@@ -216,7 +216,7 @@ const Cart = () => {
 		try {
 			SetPaymentProcess("Processing .....");
 			const res = await axios.post(
-				"https://floating-retreat-28847.herokuapp.com/api/checkout/create-session",
+				`${BASE_URL}checkout/create-session`,
 				{
 					userID: userState.currentUser._id,
 				}

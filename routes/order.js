@@ -6,6 +6,7 @@ const {
   verifyTokenAndAuthorization,
   verifyTokenAndAdmin,
 } = require("../verifyToken");
+const { BASE_URL } = require("../client/src/axiosRequest");
 
 // http://localhost:5000/api/order
 
@@ -39,7 +40,7 @@ router.get('/my-orders', async (req, res) => {
 
       await Cart.deleteMany({ userId: "" + req.query.userId })
     }
-    res.redirect('https://floating-retreat-28847.herokuapp.com/myOrders')
+    res.redirect(`${BASE_URL}myOrders`)
   } catch (error) { console.log(error) }
   // res.status(200).json(`hello from orders and this is the query you have sent ${req.query.hello}`)
   // res.redirect('http://127.0.0.1:3000/cart')
