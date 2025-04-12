@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const BASE_URL = "https://floating-retreat-28847.herokuapp.com/api/";
+export const BASE_URL = "https://mern-movie-gxeu.onrender.com/api/";
 
 // const user = JSON.parse((JSON.parse(localStorage.getItem("persist:root")).user))
 // console.log(user);
